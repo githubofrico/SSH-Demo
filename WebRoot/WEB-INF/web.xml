@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<display-name>SSHDemo</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+
+	<!-- Hibernate 允许对关联对象、属性进行延迟加载，但是必须保证延迟加载的操作限于同一个 Hibernate Session 范围之内进行。 
+		如果 Service 层返回一个启用了延迟加载功能的领域对象给 Web 层，当 Web 层访问到那些需要延迟加载的数据时，由于加载领域对象的 Hibernate 
+		Session 已经关闭，这些导致延迟加载数据的访问异常. -->
+	<!-- Spring为我们提供的OpenSessionInViewFilter过滤器为我们很好的解决了这个问题。 OpenSessionInViewFilter的主要功能是用来把一个Hibernate 
+		Session和一次完整的请求过程对应的线程相绑定。 目的是为了实现"Open Session in View"的模式。例如： 它允许在事务提交之后延迟加载显示所需要的对象。 
+		OpenSessionInViewFilter 过滤器将 Hibernate Session 绑定到请求线程中，它将自动被 Spring 的事务管理器探测到。 
+		所以 OpenSessionInViewFilter 适用于 Service 层使用HibernateTransactionManager 或 JtaTransactionManager 
+		进行事务管理的环境， 也可以用于非事务只读的数据操作中。 -->
+	<filter>
+		<filter-name>OpenSessionInViewFilter</filter-name>
+		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>OpenSessionInViewFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- Spring 提供的字符解码器：避免中文乱码 -->
+	<filter>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>AuthorityFilter</filter-name>
+		<filter-class>cn.edu.tju.rico.filter.AuthorityFilter</filter-class>
+		<init-param>
+			<param-name>loginPath</param-name>
+			<param-value>/login</param-value>
+		</init-param>
+		<init-param>
+			<param-name>registPath</param-name>
+			<param-value>/regist</param-value>
+		</init-param>
+		<init-param>
+			<param-name>rootPath</param-name>
+			<param-value>/index.jsp</param-value>
+		</init-param>
+		<init-param>
+			<param-name>choicePath</param-name>
+			<param-value>/choice</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>AuthorityFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 定义Struts2的核心Filter -->
+	<filter>
+		<!-- 可任意命名，但必须与 filter-mapping 中的 filter-name 一致 -->
+		<filter-name>Struts2</filter-name>
+		<!--struts2-core-2.1.6.jar中 包org.apache.struts2.dispatcher.ng.filter下的一个类 -->
+		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+	<!-- 使Struts2的 Filter 拦截所有请求 -->
+	<filter-mapping>
+		<filter-name>Struts2</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- Context Configuration locations for Spring XML files -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+</web-app>

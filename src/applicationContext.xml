@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<!-- IOC容器注入，使用注解配置 -->
+	<context:annotation-config />
+	<!-- Spring 自动扫描相关注解并进行注入 -->
+	<context:component-scan base-package="cn.edu.tju.rico" />
+
+	<!-- 启用 @AspectJ -->
+	<aop:aspectj-autoproxy />
+
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<!-- results in a setDriverClassName(String) call -->
+		<property name="driverClassName">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+		<property name="url">
+			<value>jdbc:mysql://localhost:3306/ssh</value>
+		</property>
+		<property name="username">
+			<value>root</value>
+		</property>
+		<property name="password">
+			<value>root</value>
+		</property>
+	</bean>
+
+	<!-- 配置 sessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>cn.edu.tju.rico.model.entity.User</value>
+				<value>cn.edu.tju.rico.model.entity.Log</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<!-- 使用注解的声明式事务管理 : Hibernate事务 -->
+	<!-- <tx:annotation-driven transaction-manager="txManager" /> -->
+
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<aop:config>
+		<aop:pointcut expression="execution(* cn.edu.tju.rico.service.impl.*.*(..))"
+			id="bussinessService" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="bussinessService" />
+	</aop:config>
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!-- 用户信息获取方法不插入用户访问日志,因此将read-only设为 true -->
+			<tx:method name="get*" read-only="true" />
+			<!-- 登录，注册方法都要插入用户访问日志,因此将read-only设为 false -->
+			<tx:method name="*" read-only="false" propagation="REQUIRED"
+				isolation="DEFAULT" />
+		</tx:attributes>
+	</tx:advice>
+</beans>
