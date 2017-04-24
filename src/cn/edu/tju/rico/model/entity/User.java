@@ -8,6 +8,13 @@ import javax.persistence.Table;
 
 import cn.edu.tju.rico.dto.UserDTO;
 
+  
+/**        
+ * Title: User.java    
+ * Description: 用户实体，用于持久化
+ * @author rico       
+ * @created 2017年4月24日 上午9:27:16    
+ */      
 @Entity
 @Table(name = "user_inf")
 public class User {
@@ -22,7 +29,14 @@ public class User {
 	public User() {
 		super();
 	}
-
+	  
+	/** 
+	 * 构造函数 
+	 * @description 用DTO构建Entity
+	 * @author rico       
+	 * @created 2017年4月24日 上午9:27:34      
+	 * @param userDTO     
+	 */ 
 	public User(UserDTO userDTO) {
 		this.uname = userDTO.getUname();
 		this.passwd = userDTO.getPasswd();

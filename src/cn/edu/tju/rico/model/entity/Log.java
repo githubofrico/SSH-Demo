@@ -10,6 +10,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+  
+/**        
+ * Title: Log.java    
+ * Description: 日志实体，用于持久化
+ * @author rico       
+ * @created 2017年4月24日 上午9:26:42    
+ */      
 @Entity
 @Table(name = "log_inf")
 public class Log {

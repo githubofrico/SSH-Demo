@@ -13,14 +13,23 @@ import cn.edu.tju.rico.service.UserService;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 
+  
+/**        
+ * Title: LoginAction.java    
+ * Description: login.jsp对应的控制器
+ * @author rico       
+ * @created 2017年4月24日 上午9:03:44    
+ */      
 @Component("login")
-@Scope("prototype")
+@Scope("prototype")  // 每个请求对应一个Action对象
 @SuppressWarnings("serial")
 public class LoginAction extends ActionSupport implements SessionAware {
 
 	private String uname;
 	private String passwd;
 	private UserService userService;
+	
+	//获取Session：Struts2中的依赖注入思想
 	private Map<String, Object> session;
 	
 	public String getUname() {

@@ -16,10 +16,21 @@ import cn.edu.tju.rico.model.entity.Log;
 import cn.edu.tju.rico.model.entity.User;
 import cn.edu.tju.rico.service.UserService;
 
+  
+/**        
+ * Title: UserServiceImpl.java    
+ * Description: 对用户相关的业务逻辑的实现
+ * @author rico       
+ * @created 2017年4月24日 上午9:32:35    
+ */      
 @Component("userService")
 public class UserServiceImpl implements UserService {
 
+	
+	/**  由Spring容器管理   (@author: rico) */      
 	private UserDao userDao;
+	
+	/**  由Spring容器管理  (@author: rico) */      
 	private LogDao logDao;
 
 	public UserDao getUserDao() {
@@ -40,7 +51,17 @@ public class UserServiceImpl implements UserService {
 		this.logDao = logDao;
 	}
 
-	// @Transactional(propagation=Propagation.REQUIRED)
+	  
+	/** 
+	 * @description 登录逻辑的具体实现
+	 * @author rico       
+	 * @created 2017年4月24日 上午9:34:07      
+	 * @param uname
+	 * @param passwd
+	 * @return     
+	 * @see cn.edu.tju.rico.service.UserService#login(java.lang.String, java.lang.String)     
+	 */  
+	// @Transactional(propagation=Propagation.REQUIRED)：注解写法：声明式事务一般对应一次用户操作
 	public boolean login(String uname, String passwd) {
 		// TODO Auto-generated method stub
 		boolean flag = false;
@@ -59,6 +80,15 @@ public class UserServiceImpl implements UserService {
 		return flag;
 	}
 
+	  
+	/** 
+	 * @description 用户注册逻辑的具体实现
+	 * @author rico       
+	 * @created 2017年4月24日 上午9:35:15      
+	 * @param userDto
+	 * @return     
+	 * @see cn.edu.tju.rico.service.UserService#regist(cn.edu.tju.rico.dto.UserDTO)     
+	 */  
 	// @Transactional(propagation=Propagation.REQUIRED)
 	public boolean regist(UserDTO userDto) {
 		// TODO Auto-generated method stub
@@ -80,6 +110,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	
+	  
+	/** 
+	 * @description 用户获取逻辑的具体实现
+	 * @author rico       
+	 * @created 2017年4月24日 上午9:35:39      
+	 * @param id
+	 * @return     
+	 * @see cn.edu.tju.rico.service.UserService#getUser(int)     
+	 */  
 	public User getUser(int id) {
 		// TODO Auto-generated method stub
 		return userDao.loadUser(id);

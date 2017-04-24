@@ -41,23 +41,31 @@
 	<!-- 配置 sessionFactory -->
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<!-- 数据源的设置 -->
 		<property name="dataSource" ref="dataSource" />
+		<!-- 用于持久化的实体类类列表 -->
 		<property name="annotatedClasses">
 			<list>
 				<value>cn.edu.tju.rico.model.entity.User</value>
 				<value>cn.edu.tju.rico.model.entity.Log</value>
 			</list>
 		</property>
+		<!-- Hibernate 的配置 -->
 		<property name="hibernateProperties">
 			<props>
+				<!-- 方言设置   -->
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<!-- 显示sql -->
 				<prop key="hibernate.show_sql">true</prop>
+				<!-- 格式化sql -->
 				<prop key="hibernate.format_sql">true</prop>
+				<!-- 自动创建/更新数据表 -->
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 			</props>
 		</property>
 	</bean>
 
+	<!-- 使用HibernateTemplate进行Dao层操作 -->
 	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
@@ -71,8 +79,10 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	<aop:config>
+		<!-- 切点 -->
 		<aop:pointcut expression="execution(* cn.edu.tju.rico.service.impl.*.*(..))"
 			id="bussinessService" />
+		<!-- 声明式事务的切入 -->
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="bussinessService" />
 	</aop:config>
 	<tx:advice id="txAdvice" transaction-manager="txManager">

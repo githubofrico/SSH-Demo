@@ -1,6 +1,12 @@
 package cn.edu.tju.rico.dto;
 
-
+/**        
+ * Title: UserDTO.java    
+ * Description: DTO(Data Transfer Object),用于传值，
+ * 与domain/entity/po/bean不同的是DTO不作持久化(包含确认密码的User)
+ * @author rico       
+ * @created 2017年4月24日 上午9:24:16    
+ */      
 public class UserDTO {
 	
 	private String uname;

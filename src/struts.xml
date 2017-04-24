@@ -6,10 +6,12 @@
 <struts>
 	<!--开发模式下，修改 struts.xml 后不需重启Tomcat便可立即生效 -->
 	<constant name="struts.devMode" value="true" />
-	<constant name="struts.enable.DynamicMethodInvocation" value="true" /> 
-	
-	
+	<!-- 开启动态方法调用权限 -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+
+
 	<package name="default" namespace="/" extends="struts-default">
+		<!-- 与Spring整合时，class的属性值指向Spring中对应Action的id值(例如:@Component("choice")) -->
 		<action name="choice" class="choice">
 			<result name="regist">/regist.jsp</result>
 			<result name="login">/login.jsp</result>

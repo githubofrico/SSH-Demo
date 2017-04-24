@@ -13,6 +13,8 @@
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
 
+	<!-- 注意：各过滤器的加载顺序 -->
+
 	<!-- Hibernate 允许对关联对象、属性进行延迟加载，但是必须保证延迟加载的操作限于同一个 Hibernate Session 范围之内进行。 
 		如果 Service 层返回一个启用了延迟加载功能的领域对象给 Web 层，当 Web 层访问到那些需要延迟加载的数据时，由于加载领域对象的 Hibernate 
 		Session 已经关闭，这些导致延迟加载数据的访问异常. -->
@@ -24,6 +26,12 @@
 	<filter>
 		<filter-name>OpenSessionInViewFilter</filter-name>
 		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+		<init-param>
+			<!-- 配置applicationContext中sessionFactory的名字，防止其找不到sessionFactory.(OpenSessionInViewFilter默认会去 
+				applicationContext中查找id为sessionFactory的SessionFactory) -->
+			<param-name>sessionFactoryBeanName</param-name>
+			<param-value>sessionFactory</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>OpenSessionInViewFilter</filter-name>
@@ -43,7 +51,8 @@
 		<filter-name>CharacterEncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
+	<!-- 模拟权限控制的AuthorityFilter -->
 	<filter>
 		<filter-name>AuthorityFilter</filter-name>
 		<filter-class>cn.edu.tju.rico.filter.AuthorityFilter</filter-class>
@@ -69,7 +78,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<!-- 定义Struts2的核心Filter -->
+	<!-- 前端控制器：定义Struts2的核心Filter -->
 	<filter>
 		<!-- 可任意命名，但必须与 filter-mapping 中的 filter-name 一致 -->
 		<filter-name>Struts2</filter-name>
@@ -82,10 +91,11 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
+	<!-- 在Web启动时加载、启动、初始化Spring容器 -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	<!-- Context Configuration locations for Spring XML files -->
+	<!-- Context Configuration locations for Spring XML files(默认查找/WEB-INF/applicationContext.xml) -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:applicationContext.xml</param-value>

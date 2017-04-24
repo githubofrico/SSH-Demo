@@ -11,12 +11,19 @@ import cn.edu.tju.rico.service.UserService;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 
+  
+/**        
+ * Title: RegistAction.java    
+ * Description:regist.jsp 对应的控制器 
+ * @author rico       
+ * @created 2017年4月24日 上午9:05:47    
+ */      
 @Component("regist")
-@Scope("prototype")
+@Scope("prototype")// 每个请求对应一个Action对象
 @SuppressWarnings("serial")
 public class RegistAction extends ActionSupport {
 
-	private UserDTO userDTO;
+	private UserDTO userDTO;  // DTO：Data Transfer Object，用于传值，不作持久化(包含确认密码的User)
 	private UserService userService;
 
 	public UserDTO getUserDTO() {

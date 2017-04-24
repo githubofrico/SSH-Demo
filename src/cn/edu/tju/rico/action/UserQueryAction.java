@@ -11,13 +11,22 @@ import cn.edu.tju.rico.service.UserService;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 
+  
+/**        
+ * Title: UserQueryAction.java    
+ * Description: show.jsp 对应的控制器 
+ * @author rico       
+ * @created 2017年4月24日 上午9:07:29    
+ */      
 @SuppressWarnings("serial")
 @Component("userQuery")
-@Scope("prototype")
+@Scope("prototype")  // 每个请求对应一个Action对象
 public class UserQueryAction extends ActionSupport{
 
 	private int id;
 	private UserService userService;
+	
+	// 存储业务处理结果
 	private User user;
 	
 	public int getId() {
